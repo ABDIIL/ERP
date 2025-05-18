@@ -1,0 +1,110 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "movementsapplication",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": { "version": "0.0.1" },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZSD_067_MOVEMENT_SRV/",
+        "type": "OData",
+        "settings": { "odataVersion": "2.0" }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.30",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.f": {},
+        "sap.ui.signature": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": { "bundleName": "movementsapplication.i18n.i18n" }
+      },
+      "": {
+        "dataSource": "mainService",
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "useBatch": true,
+          "refreshAfterChange": false
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        { "uri": "css/style.css" }
+      ]
+    },
+    "rootView": {
+      "viewName": "movementsapplication.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.f.routing.Router",
+        "controlId": "flexiID",
+        "controlAggregation": "beginColumnPages",
+        "viewType": "XML",
+        "async": true,
+        "transition": "slide"
+      },
+      "routes": [
+        {
+          "name": "RouteMain",
+          "pattern": "",
+          "target": ["TargetMain"]
+        },
+        {
+          "name": "Detail",
+          "pattern": "Detail/{MovementID}",
+          "target": ["TargetMain", "Detail"]
+        }
+      ],
+      "targets": {
+        "TargetMain": {
+          "viewName": "movementsapplication.view.Master",
+          "viewId": "Master",
+          "viewLevel": 1
+        },
+        "Detail": {
+          "viewName": "movementsapplication.view.Detail",
+          "viewId": "Detail",
+          "controlAggregation": "midColumnPages",
+          "viewLevel": 2
+        }
+      }
+    }
+  }
+}

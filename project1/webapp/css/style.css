@@ -1,0 +1,40 @@
+/* Algemeen: content padding voor alle pages */
+.sapUiContentPadding {
+    padding: 1rem;
+  }
+  
+  /* Kleine marges boven elementen */
+  .sapUiSmallMarginTop {
+    margin-top: 0.75rem;
+  }
+  
+  /* Kleine marges onder elementen */
+  .sapUiSmallMarginBottom {
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Ruime spacing tussen form-groepen */
+  form ~ form {
+    margin-top: 1rem;
+  }
+  
+  /* Stijl voor sectietitels */
+  .titleSection {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Ruimte tussen knoppen */
+  .sapMToolbar .sapMBtn {
+    margin-right: 0.5rem;
+  }
+  
+  /* Responsive max-breedte voor detail-formulier */
+  @media (min-width: 600px) {
+    #formDetail {
+      max-width: 600px;
+    }
+  }
+  

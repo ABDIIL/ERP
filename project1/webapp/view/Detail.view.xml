@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:View
+  controllerName="movementsapplication.controller.Detail"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:form="sap.ui.layout.form"
+  xmlns:core="sap.ui.core"
+>
+  <f:DynamicPage
+    id="detailPage"
+    headerExpanded="true"
+    toggleHeaderOnTitleClick="true"
+  >
+
+   
+    <f:title>
+      <f:DynamicPageTitle id="detailDPT">
+        <f:heading>
+          <Title
+            id="ttlDetailPage"
+            text="{i18n>titleDetail}"
+            level="H2"
+          />
+        </f:heading>
+        <f:actions>
+          <Toolbar id="toolbarDetailActions" class="sapUiTinyMargin">
+            <Button id="btnNavBack"   icon="sap-icon://nav-back" press="onNavBack"/>
+            <ToolbarSpacer id="tsDetailSpacer"/>
+            <Button
+              id="btnSave"
+              text="{i18n>buttonSave}"
+              type="Emphasized"
+              press="onSave"
+              visible="{= ${/MovementID} !== undefined }"
+            />
+            <Button
+              id="btnCreateDetail"
+              text="{i18n>buttonCreateDetail}"
+              type="Emphasized"
+              press="onCreateMovement"
+              visible="{= !${/MovementID} }"
+            />
+            <Button
+              id="btnMarkDone"
+              text="{i18n>buttonMarkDone}"
+              press="onMarkDone"
+              visible="{= ${/MovementID} !== undefined }"
+            />
+          </Toolbar>
+        </f:actions>
+      </f:DynamicPageTitle>
+    </f:title>
+
+    <!-- 2) Één enkel element onder <f:content> -->
+    <f:content>
+      <VBox id="vboxDetailContent" class="sapUiContentPadding sapUiTinyMargin">
+        <!-- Formulier -->
+        <form:SimpleForm
+          id="formDetail"
+          editable="true"
+          layout="ResponsiveGridLayout"
+          labelSpanL="4"
+          labelSpanM="4"
+          columnsL="1"
+          columnsM="1"
+        >
+          <Label id="lblFrom" text="{i18n>fromLocation}"/>
+          <Input id="inpFrom" value="{FromLocation}"/>
+
+          <Label id="lblTo" text="{i18n>toLocation}"/>
+          <Input id="inpTo" value="{ToLocation}"/>
+
+          <Label id="lblDate" text="{i18n>movementDate}"/>
+          <DatePicker
+            id="dpDate"
+            value="{
+              path: 'MovementDate',
+              type: 'sap.ui.model.type.Date',
+              formatOptions: { pattern: 'dd.MM.yyyy' }
+            }"
+            displayFormat="dd.MM.yyyy"
+          />
+
+          <Label id="lblType" text="{i18n>movementType}"/>
+          <Select id="selType" selectedKey="{MovementType}">
+            <items>
+              <core:Item id="itmType1" key="Laden"            text="{i18n>filterTypeLoad}"/>
+              <core:Item id="itmType2" key="Lossen"           text="{i18n>filterTypeUnload}"/>
+              <core:Item id="itmType3" key="Laden &amp; Lossen" text="{i18n>filterTypeBoth}"/>
+            </items>
+          </Select>
+        </form:SimpleForm>
+
+        <!-- Materialen sectie -->
+        <Toolbar id="tbMaterials" class="sapUiTinyMarginTop">
+          <Title id="ttlMaterials" text="{i18n>materials}" level="H4"/>
+          <ToolbarSpacer id="tsMatSpacer"/>
+          <Button id="btnAddMat"    icon="sap-icon://add"    press="onAddMaterial" tooltip="{i18n>buttonAddMaterial}"/>
+          <Button id="btnRemoveMat" icon="sap-icon://delete" press="onRemoveMaterial" tooltip="{i18n>buttonRemoveMaterial}"/>
+        </Toolbar>
+
+        <Table
+          id="tblMaterials"
+          inset="false"
+          items="{ path: 'Materials' }"
+        >
+          <columns>
+            <Column id="colMatnr"><Text id="txtHdrMatnr" text="{i18n>matnr}"/></Column>
+            <Column id="colDesc"><Text id="txtHdrDesc" text="{i18n>description}"/></Column>
+            <Column id="colQty"><Text id="txtHdrQty"  text="{i18n>quantity}"/></Column>
+            <Column id="colUnit"><Text id="txtHdrUnit" text="{i18n>unitWeight}"/></Column>
+          </columns>
+          <items>
+            <ColumnListItem id="cliMaterial">
+              <cells>
+                <Text  id="txtMatnr" text="{Matnr}"/>
+                <Input id="inpDesc" value="{Description}"/>
+                <Input id="inpQty"  value="{Quantity}"/>
+                <Input id="inpUnit" value="{UnitWeight}"/>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+
+        <!-- Gewicht opvragen -->
+        <Button
+          id="btnGetWeight"
+          text="{i18n>buttonGetWeight}"
+          press="onGetWeight"
+          class="sapUiTinyMarginTop"
+        />
+      </VBox>
+    </f:content>
+
+  </f:DynamicPage>
+</mvc:View>

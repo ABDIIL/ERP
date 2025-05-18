@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FLP Sandbox – ERP Movements</title>
+
+    <!-- 1) De sandbox-configuratie inladen -->
+    <script
+      id="sap-ushell-config"
+      type="application/json"
+      src="fioriSandboxConfig.json"
+    ></script>
+
+    <!-- 2) UI5 bootstrap met ushell-library -->
+    <script
+      id="sap-ui-bootstrap"
+      src="../resources/sap-ui-core.js"
+      data-sap-ui-theme="sap_fiori_3"
+      data-sap-ui-libs="sap.ushell,sap.m,sap.f"
+      data-sap-ui-compatVersion="edge"
+      data-sap-ui-async="true"
+      data-sap-ui-frameOptions="trusted"
+      data-sap-ui-resourceroots='{"movementsapplication": "../webapp"}'
+      data-sap-ui-preload="async"
+    ></script>
+
+    <!-- 3) Bootstrap de lokale ushell -->
+    <script src="../resources/sap/ushell/bootstrap/sandbox.js"></script>
+    <script>
+      sap.ushell.bootstrap("local").then(function () {
+        sap.ushell.Container.createRenderer().placeAt("content");
+      });
+    </script>
+  </head>
+
+  <body class="sapUiBody" id="content"></body>
+</html>

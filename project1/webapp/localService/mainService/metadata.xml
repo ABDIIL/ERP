@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZSD_002_ERP_ADVANCED_BOOKS_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <EntityType Name="Genre" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Name"/>
+                </Key>
+                <Property Name="Name" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Data element van book genre" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="StoreStock" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BookTitle"/>
+                    <PropertyRef Name="BookAuthor"/>
+                </Key>
+                <Property Name="Isbn" Type="Edm.String" Nullable="false" MaxLength="13" sap:unicode="false" sap:label="Data element van book isbn" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BookTitle" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Data element van book title" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="StoreId" Type="Edm.Byte" Nullable="false" sap:unicode="false" sap:label="INT1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BookAuthor" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Data element van book autheur" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stock" Type="Edm.Byte" Nullable="false" sap:unicode="false" sap:label="INT1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Name" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Data element van de book store" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="Book" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Title"/>
+                    <PropertyRef Name="Author"/>
+                </Key>
+                <Property Name="Title" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Data element van book title" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Author" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Data element van book autheur" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Genre" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Data element van book genre" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="ToStoreStock" Relationship="ZSD_002_ERP_ADVANCED_BOOKS_SRV.BookStoreStock" FromRole="FromRole_BookStoreStock" ToRole="ToRole_BookStoreStock"/>
+            </EntityType>
+            <Association Name="BookStoreStock" sap:content-version="1">
+                <End Type="ZSD_002_ERP_ADVANCED_BOOKS_SRV.Book" Multiplicity="1" Role="FromRole_BookStoreStock"/>
+                <End Type="ZSD_002_ERP_ADVANCED_BOOKS_SRV.StoreStock" Multiplicity="*" Role="ToRole_BookStoreStock"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_BookStoreStock">
+                        <PropertyRef Name="Title"/>
+                        <PropertyRef Name="Author"/>
+                    </Principal>
+                    <Dependent Role="ToRole_BookStoreStock">
+                        <PropertyRef Name="BookTitle"/>
+                        <PropertyRef Name="BookAuthor"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZSD_002_ERP_ADVANCED_BOOKS_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="GenreSet" EntityType="ZSD_002_ERP_ADVANCED_BOOKS_SRV.Genre" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="StoreStockSet" EntityType="ZSD_002_ERP_ADVANCED_BOOKS_SRV.StoreStock" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="BookSet" EntityType="ZSD_002_ERP_ADVANCED_BOOKS_SRV.Book" sap:content-version="1"/>
+                <AssociationSet Name="BookStoreStockSet" Association="ZSD_002_ERP_ADVANCED_BOOKS_SRV.BookStoreStock" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="BookSet" Role="FromRole_BookStoreStock"/>
+                    <End EntitySet="StoreStockSet" Role="ToRole_BookStoreStock"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="https://A03Z.UCC.OVGU.DE:443/sap/opu/odata/sap/ZSD_002_ERP_ADVANCED_BOOKS_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://A03Z.UCC.OVGU.DE:443/sap/opu/odata/sap/ZSD_002_ERP_ADVANCED_BOOKS_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
