@@ -1,30 +1,27 @@
 {
-  "_version": "1.60.0",
+  "_version": "1.12.0",
   "sap.app": {
     "id": "movementsapplication",
     "type": "application",
     "i18n": "i18n/i18n.properties",
-    "applicationVersion": { "version": "0.0.1" },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
+    "title": "Movements Application",
+    "description": "Overzicht en beheer van vrachtverplaatsingen",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
     "dataSources": {
       "mainService": {
-        "uri": "/sap/opu/odata/sap/ZSD_067_MOVEMENT_SRV/",
+        "uri": "/sap/opu/odata/sap/ZSD_067_MOVEMENT_SRV/", 
         "type": "OData",
-        "settings": { "odataVersion": "2.0" }
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/metadata.xml"
+        }
       }
     }
   },
   "sap.ui": {
     "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
     "deviceTypes": {
       "desktop": true,
       "tablet": true,
@@ -32,77 +29,71 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "rootView": {
+      "viewName": "movementsapplication.view.App",
+      "type": "XML",
+      "id": "app"
+    },
     "dependencies": {
-      "minUI5Version": "1.120.30",
+      "minUI5Version": "1.88.0",
       "libs": {
-        "sap.ui.core": {},
         "sap.m": {},
-        "sap.f": {},
-        "sap.ui.signature": {}
+        "sap.f": {}
+      }
+    },
+    "models": {
+      "": {
+        "dataSource": "mainService",
+        "settings": {
+          "defaultCountMode": "Inline",
+          "useBatch": true
+        }
+      },
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "movementsapplication.i18n.i18n"
+        }
       }
     },
     "contentDensities": {
       "compact": true,
       "cozy": true
     },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": { "bundleName": "movementsapplication.i18n.i18n" }
-      },
-      "": {
-        "dataSource": "mainService",
-        "settings": {
-          "defaultBindingMode": "TwoWay",
-          "useBatch": true,
-          "refreshAfterChange": false
-        }
-      }
-    },
-    "resources": {
-      "css": [
-        { "uri": "css/style.css" }
-      ]
-    },
-    "rootView": {
-      "viewName": "movementsapplication.view.App",
-      "type": "XML",
-      "id": "App",
-      "async": true
-    },
     "routing": {
       "config": {
         "routerClass": "sap.f.routing.Router",
-        "controlId": "flexiID",
-        "controlAggregation": "beginColumnPages",
         "viewType": "XML",
-        "async": true,
-        "transition": "slide"
+        "viewPath": "movementsapplication.view",
+        "controlId": "fclDetail",
+        "controlAggregation": "beginColumnPages",
+        "bypassed": {
+          "target": "master"
+        }
       },
       "routes": [
         {
-          "name": "RouteMain",
           "pattern": "",
-          "target": ["TargetMain"]
+          "name": "master",
+          "target": "master"
         },
         {
-          "name": "Detail",
-          "pattern": "Detail/{MovementID}",
-          "target": ["TargetMain", "Detail"]
+          "pattern": "detail/{movementContext}",
+          "name": "detail",
+          "target": "detail"
         }
       ],
       "targets": {
-        "TargetMain": {
-          "viewName": "movementsapplication.view.Master",
-          "viewId": "Master",
-          "viewLevel": 1
+        "master": {
+          "viewName": "Master",
+          "viewLevel": 1,
+          "viewId": "masterView"
         },
-        "Detail": {
-          "viewName": "movementsapplication.view.Detail",
-          "viewId": "Detail",
+        "detail": {
+          "viewName": "Detail",
+          "viewLevel": 2,
           "controlAggregation": "midColumnPages",
-          "viewLevel": 2
+          "viewId": "detailView"
         }
       }
     }

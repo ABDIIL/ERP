@@ -1,99 +1,153 @@
+// webapp/controller/Detail.controller.js
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-  ], function (Controller) {
-    "use strict";
-  
-    return Controller.extend("movementsapplication.controller.Detail", {
-      onInit: function () {
-        this._oModel = this.getView().getModel();
-        var oRouter = this.getOwnerComponent().getRouter();
-        oRouter.getRoute("Detail").attachPatternMatched(this._onRouteMatched, this);
-      },
-  
-      _onRouteMatched: function (oEvent) {
-        var sID = oEvent.getParameter("arguments").MovementID;
-        if (sID) {
-          // Bestaande movement: bind element
-          this.getView().bindElement({ path: "/MovementSet('" + sID + "')" });
-        } else {
-          // Create-modus: leeg model voor nieuwe values
-          var oNew = {
-            MovementID: "",
-            FromLocation: "",
-            ToLocation: "",
-            MovementDate: null,
-            MovementType: ""
-          };
-          // tijdelijke JSONModel om binding te laten werken
-          var oTemp = new sap.ui.model.json.JSONModel(oNew);
-          this.getView().setModel(oTemp, "temp");
-          this.getView().bindElement({ path: "temp>/" });
-        }
-      },
-  
-      onCreateMovement: function () {
-        var oData = this.getView().getModel("temp").getData();
-        // callFunction naar create_movement GW-function import
-        this._oModel.callFunction("/create_movement", {
-          method: "POST",
-          urlParameters: {
-            iv_id:             oData.MovementID,
-            iv_from_location:  oData.FromLocation,
-            iv_to_location:    oData.ToLocation,
-            iv_movement_date:  oData.MovementDate,
-            iv_movement_type:  oData.MovementType
-          },
-          success: function (oResult) {
-            // navigeer naar nieuw aangemaakte movement
-            this.getOwnerComponent().getRouter().navTo("Detail", {
-              MovementID: oResult.MovementID
-            });
-            sap.m.MessageToast.show("Movement aangemaakt: " + oResult.MovementID);
-          }.bind(this)
+  "sap/ui/core/mvc/Controller",
+  "sap/ui/model/json/JSONModel",
+  "sap/m/MessageToast"
+], function (Controller, JSONModel, MessageToast) {
+  "use strict";
+
+  return Controller.extend("movementsapplication.controller.Detail", {
+    onInit: function () {
+      var oViewModel = new JSONModel({
+        isCreate: false
+      });
+      this.getView().setModel(oViewModel, "viewModel");
+
+      this.getOwnerComponent().getRouter()
+        .getRoute("detail")
+        .attachPatternMatched(this._onRouteMatched, this);
+    },
+
+    _onRouteMatched: function (oEvent) {
+      var sCtx = oEvent.getParameter("arguments").movementContext;
+      var oVM = this.getView().getModel("viewModel");
+      if (sCtx === "NEW") {
+        oVM.setProperty("/isCreate", true);
+        this._initDraft();
+        this._loadSuggestions();
+      } else {
+        oVM.setProperty("/isCreate", false);
+        this.getView().bindElement({
+          path: decodeURIComponent(sCtx),
+          model: "movementModel"
         });
-      },
-  
-      onSave: function () {
-        this._oModel.submitChanges({
-          success: function () {
-            sap.m.MessageToast.show("Wijzigingen opgeslagen");
-          }
-        });
-      },
-  
-      onMarkDone: function () {
-        var sID = this.getView().getBindingContext().getProperty("MovementID");
-        this._oModel.callFunction("/mark_movement_as_done", {
-          method: "POST",
-          urlParameters: { iv_id: sID },
-          success: function () {
-            sap.m.MessageToast.show("Gemarkeerd als uitgevoerd");
-          }
-        });
-      },
-  
-      onGetWeight: function () {
-        var sID = this.getView().getBindingContext().getProperty("MovementID");
-        this._oModel.callFunction("/get_total_weight", {
-          method: "GET",
-          urlParameters: { iv_id: sID },
-          success: function (oData) {
-            sap.m.MessageToast.show("Totaal gewicht: " + oData);
-          }
-        });
-      },
-  
-      onAddMaterial: function () {
-        // implementatie blijft gelijk
-      },
-  
-      onRemoveMaterial: function () {
-        // implementatie blijft gelijk
-      },
-  
-      onSign: function () {
-        // implementatie blijft gelijk
       }
-    });
+    },
+
+    _initDraft: function () {
+      var oDraft = {
+        MovementID: "",
+        FromLocation: "",
+        ToLocation: "",
+        MovementDate: new Date(),
+        MovementType: "",
+        Materials: []
+      };
+      this.getView().setModel(new JSONModel(oDraft), "movementModel");
+    },
+
+    _loadSuggestions: function () {
+      this.getOwnerComponent().getModel().callFunction("/SuggestMovementDetails", {
+        method: "GET",
+        success: function (oData) {
+          var oSugModel = new JSONModel({ suggestions: oData.results });
+          this.getView().setModel(oSugModel, "sugModel");
+        }.bind(this),
+        error: function () {
+          MessageToast.show("Geen suggesties beschikbaar");
+        }
+      });
+    },
+
+    onSuggestionChange: function (oEvent) {
+      var oCtx = oEvent.getSource().getSelectedItem().getBindingContext("sugModel");
+      var oSug = oCtx.getObject();
+      this.getView().getModel("movementModel").setData(oSug, true);
+    },
+
+    onSave: function () {
+      var bCreate = this.getView().getModel("viewModel").getProperty("/isCreate"),
+          oModel = this.getOwnerComponent().getModel(),
+          oData  = this.getView().getModel("movementModel").getData();
+
+      if (bCreate) {
+        oModel.create("/MovementSet", oData, {
+          success: function () {
+            MessageToast.show("Verplaatsing aangemaakt");
+            this.getOwnerComponent().getRouter().navTo("master");
+          }.bind(this),
+          error: function () {
+            MessageToast.show("Fout bij aanmaken");
+          }
+        });
+      } else {
+        var sPath = this.getView().getBindingContext("movementModel").getPath();
+        oModel.update(sPath, oData, {
+          success: function () {
+            MessageToast.show("Verplaatsing bijgewerkt");
+            this.getOwnerComponent().getRouter().navTo("master");
+          }.bind(this),
+          error: function () {
+            MessageToast.show("Fout bij bijwerken");
+          }
+        });
+      }
+    },
+
+    onMarkDone: function () {
+      var sPath = this.getView().getBindingContext("movementModel").getPath(),
+          sId   = sPath.split("'")[1];
+      this.getOwnerComponent().getModel().callFunction("/MarkMovementAsDone", {
+        method: "POST",
+        urlParameters: { id: sId },
+        success: function () {
+          MessageToast.show("Gemarkeerd als uitgevoerd");
+          this.getOwnerComponent().getRouter().navTo("master");
+        }.bind(this),
+        error: function () {
+          MessageToast.show("Fout bij markeren");
+        }
+      });
+    },
+
+    onMarkUndone: function () {
+      var sPath = this.getView().getBindingContext("movementModel").getPath(),
+          sId   = sPath.split("'")[1];
+      this.getOwnerComponent().getModel().callFunction("/MarkMovementAsUndone", {
+        method: "POST",
+        urlParameters: { id: sId },
+        success: function () {
+          MessageToast.show("Gemarkeerd als onuitgevoerd");
+          this.getOwnerComponent().getRouter().navTo("master");
+        }.bind(this),
+        error: function () {
+          MessageToast.show("Fout bij markeren");
+        }
+      });
+    },
+
+    onAddMaterial: function () {
+      var oView       = this.getView(),
+          aMaterials  = oView.getModel("movementModel").getProperty("/Materials"),
+          oNew        = {
+            MaterialNumber: "",
+            Description: "",
+            Quantity: 1,
+            UnitWeight: 0.0
+          };
+      aMaterials.push(oNew);
+      oView.getModel("movementModel").setProperty("/Materials", aMaterials);
+    },
+
+    onRemoveMaterial: function (oEvent) {
+      var iIndex = oEvent.getParameter("listItem")
+            .getBindingContext("movementModel")
+            .getPath()
+            .split("/").pop(),
+          aMaterials = this.getView().getModel("movementModel").getProperty("/Materials");
+      aMaterials.splice(iIndex, 1);
+      this.getView().getModel("movementModel").setProperty("/Materials", aMaterials);
+    }
+
   });
-  
+});
