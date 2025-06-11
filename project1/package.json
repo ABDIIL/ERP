@@ -8,12 +8,6 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {},
-  "devDependencies": {
-    "@ui5/cli": "^3.0.0",
-    "@sap/ux-ui5-tooling": "1",
-    "@sap-ux/ui5-middleware-fe-mockserver": "2"
-  },
   "scripts": {
     "start": "fiori run --open \"test/flp.html#app-preview\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
@@ -25,6 +19,12 @@
     "int-test": "fiori run --config ./ui5-mock.yaml --open 'test/integration/opaTests.qunit.html'",
     "start-variants-management": "fiori run --open \"preview.html#app-preview\"",
     "unit-test": "fiori run --config ./ui5-mock.yaml --open 'test/unit/unitTests.qunit.html'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@ui5/cli": "^3.0.0",
+    "@sap/ux-ui5-tooling": "1",
+    "@sap-ux/ui5-middleware-fe-mockserver": "2"
   },
   "sapuxLayer": "CUSTOMER_BASE"
 }

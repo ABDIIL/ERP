@@ -1,18 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movements Application</title>
     <script
       id="sap-ui-bootstrap"
       src="https://ui5.sap.com/1.88.0/resources/sap-ui-core.js"
-      data-sap-ui-libs="sap.m,sap.f"
+      data-sap-ui-libs="sap.m sap.f"
       data-sap-ui-theme="sap_fiori_3"
-      data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
+      data-sap-ui-async="true"
+      data-sap-ui-compatVersion="edge"
       data-sap-ui-resourceroots='{"movementsapplication": "./"}'
     ></script>
   </head>
-  <body class="sapUiBody" id="content">
-    <!-- The App view will be placed here by the Component -->
+  <body class="sapUiBody sapUiSizeCompact" id="content">
+    <div
+      id="container"
+      data-sap-ui-component
+      data-name="movementsapplication"
+      data-id="movementsapplication"
+      data-settings='{"id":"movementsapplication"}'
+      data-handle-validation="true"
+    ></div>
   </body>
 </html>
