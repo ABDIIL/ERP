@@ -1,107 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <mvc:View
-  controllerName="movementsapplication.controller.App"
-  xmlns="sap.m"
-  xmlns:f="sap.f"
   xmlns:mvc="sap.ui.core.mvc"
-  xmlns:core="sap.ui.core"
->
+  xmlns:f="sap.f"
+  xmlns="sap.m"
+  controllerName="project1.controller.App"
+  displayBlock="true">
+
   <f:FlexibleColumnLayout
     id="flexiID"
-    layout="OneColumn"
-  >
+    layout="OneColumn">
+
     <f:beginColumnPages>
-      <!-- Master Dynamic Page -->
-      <f:DynamicPage
-        id="masterPage"
-        headerExpanded="true"
-        toggleHeaderOnTitleClick="true"
-      >
-        <!-- Titel-aggregatie van DynamicPage -->
-        <f:title>
-          <f:DynamicPageTitle id="masterDPT">
-            <!-- Heading-aggregatie van DynamicPageTitle -->
-            <f:heading>
-              <Title
-                id="ttlMasterPage"
-                text="{i18n>titleMovements}"
-                level="H2"
-              />
-            </f:heading>
-          </f:DynamicPageTitle>
-        </f:title>
-
-        <!-- Content-aggregatie: toolbar + lijst in één container -->
-        <f:content>
-          <VBox id="vboxMasterContent" class="sapUiTinyMargin">
-            <Toolbar id="toolbarFilters">
-              <Select
-                id="selFilterType"
-                width="200px"
-                change="onFilterChange"
-              >
-                <items>
-                  <core:Item
-                    id="itmFilterAll"
-                    key=""
-                    text="{i18n>filterTypeAll}"
-                  />
-                  <core:Item
-                    id="itmFilterLoad"
-                    key="Laden"
-                    text="{i18n>filterTypeLoad}"
-                  />
-                  <core:Item
-                    id="itmFilterUnload"
-                    key="Lossen"
-                    text="{i18n>filterTypeUnload}"
-                  />
-                  <core:Item
-                    id="itmFilterBoth"
-                    key="Laden &amp; Lossen"
-                    text="{i18n>filterTypeBoth}"
-                  />
-                </items>
-              </Select>
-              <DatePicker
-                id="dpFilterDate"
-                displayFormat="dd.MM.yyyy"
-                change="onFilterChange"
-              />
-              <ToolbarSpacer id="tsFilterSpacer"/>
-              <Button
-                id="btnCreate"
-                text="{i18n>buttonCreate}"
-                type="Emphasized"
-                press="onCreate"
-              />
-            </Toolbar>
-
-            <List
-              id="lstMovements"
-              mode="SingleSelectLeft"
-              items="{ path: '/MovementSet' }"
-              itemPress="onSelect"
-            >
-              <items>
-                <ObjectListItem
-                  id="oliMovement"
-                  title="{MovementID}"
-                  intro="{FromLocation} → {ToLocation}"
-                  number="{MovementType}"
-                  type="Active"
-                />
-              </items>
-            </List>
-          </VBox>
-        </f:content>
-
-      </f:DynamicPage>
+      <Page id="page1" title="{i18n>beginColumnTitle}">
+        <!-- begin-column content -->
+      </Page>
     </f:beginColumnPages>
 
-    <!-- lege kolommen voor detail/navigatie -->
-    <f:midColumnPages/>
-    <f:endColumnPages/>
+    <f:midColumnPages>
+      <Page id="page2" title="{i18n>midColumnTitle}">
+        <!-- mid-column content -->
+      </Page>
+    </f:midColumnPages>
+
+    <f:endColumnPages>
+      <Page id="page3" title="{i18n>endColumnTitle}">
+        <!-- end-column content -->
+      </Page>
+    </f:endColumnPages>
 
   </f:FlexibleColumnLayout>
 </mvc:View>

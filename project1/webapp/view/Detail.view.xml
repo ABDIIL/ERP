@@ -7,106 +7,101 @@
     xmlns:core="sap.ui.core"
     displayBlock="true">
 
-  <f:FlexibleColumnLayout id="fclDetail">
-    <f:beginColumnPages/>
-    <f:midColumnPages>
-      <f:DynamicPage
-        id="dpDetail"
-        headerExpanded="true"
-        toggleHeaderOnTitleClick="true">
+  <!-- Detail-view zonder extra FlexibleColumnLayout-wrapper -->
+  <f:DynamicPage
+      id="dpDetail"
+      headerExpanded="true"
+      toggleHeaderOnTitleClick="true">
 
-        <f:DynamicPageTitle id="dptDetailTitle">
-          <f:heading>
-            <Title id="txtDetailTitle" text="{movementModel>/MovementID}"/>
-          </f:heading>
-          <f:actions>
-            <Button id="btnSave" text="Opslaan" press="onSave"/>
-            <Button id="btnMarkDone" text="Markeer Uitgevoerd" press="onMarkDone"/>
-            <Button id="btnMarkUndone" text="Markeer Onuitgevoerd" press="onMarkUndone"/>
-          </f:actions>
-        </f:DynamicPageTitle>
+    <f:DynamicPageTitle id="dptDetailTitle">
+      <f:heading>
+        <Title id="txtDetailTitle" text="{movementModel>/MovementID}" />
+      </f:heading>
+      <f:actions>
+        <Button id="btnSave" text="Opslaan" press="onSave" />
+        <Button id="btnMarkDone" text="Markeer Uitgevoerd" press="onMarkDone" />
+        <Button id="btnMarkUndone" text="Markeer Onuitgevoerd" press="onMarkUndone" />
+      </f:actions>
+    </f:DynamicPageTitle>
 
-        <f:header>
-          <f:DynamicPageHeader id="dphDetailHeader">
-            <VBox id="vbHeaderContent">
-              <Text id="txtHeaderContent" text="Extra header info"/>
-            </VBox>
-          </f:DynamicPageHeader>
-        </f:header>
+    <f:header>
+      <f:DynamicPageHeader id="dphDetailHeader">
+        <VBox id="vbHeaderContent">
+          <Text id="txtHeaderContent" text="Extra header info" />
+        </VBox>
+      </f:DynamicPageHeader>
+    </f:header>
 
-        <f:content>
-          <ScrollContainer id="scDetailContent" vertical="true">
-            <VBox id="vbDetailContent" class="sapUiSmallMargin">
+    <f:content>
+      <ScrollContainer id="scDetailContent" vertical="true">
+        <VBox id="vbDetailContent" class="sapUiSmallMargin">
 
-              <Label id="lblSuggestion" text="Voorstel verplaatsing" class="sapUiSmallMarginBottom"/>
-              <Select
-                id="selSuggestion"
-                items="{
-                  path: 'sugModel>/suggestions',
-                  templateShareable: false
-                }"
-                change="onSuggestionChange">
-                <core:Item
-                  id="itmSugTemplate"
-                  key="{sugModel>movement_type}"
-                  text="{sugModel>from_location} → {sugModel>to_location} ({sugModel>movement_type})"/>
-              </Select>
+          <Label id="lblSuggestion" text="Voorstel verplaatsing" class="sapUiSmallMarginBottom" />
+          <Select
+            id="selSuggestion"
+            items="{
+              path: 'sugModel>/suggestions',
+              templateShareable: false
+            }"
+            change="onSuggestionChange">
+            <core:Item
+              key="{sugModel>movement_type}"
+              text="{sugModel>from_location} → {sugModel>to_location} ({sugModel>movement_type})" />
+          </Select>
 
-              <Label id="lblFrom" text="Van locatie"/>
-              <Input id="inpFrom" value="{movementModel>/FromLocation}"/>
+          <Label id="lblFrom" text="Van locatie" />
+          <Input id="inpFrom" value="{movementModel>/FromLocation}" />
 
-              <Label id="lblTo" text="Naar locatie"/>
-              <Input id="inpTo" value="{movementModel>/ToLocation}"/>
+          <Label id="lblTo" text="Naar locatie" />
+          <Input id="inpTo" value="{movementModel>/ToLocation}" />
 
-              <Label id="lblDate" text="Datum"/>
-              <DatePicker
-                id="dpDate"
-                value="{
-                  path: 'movementModel>/MovementDate',
-                  type: 'sap.ui.model.type.Date',
-                  formatOptions: {pattern:'yyyy-MM-dd'}
-                }"/>
+          <Label id="lblDate" text="Datum" />
+          <DatePicker
+            id="dpDate"
+            value="{
+              path: 'movementModel>/MovementDate',
+              type: 'sap.ui.model.type.Date',
+              formatOptions: { pattern: 'yyyy-MM-dd' }
+            }" />
 
-              <Label id="lblType" text="Type"/>
-              <Select id="selType" selectedKey="{movementModel>/MovementType}">
-                <core:Item id="itmLoad" key="Laden" text="Laden"/>
-                <core:Item id="itmUnload" key="Lossen" text="Lossen"/>
-                <core:Item id="itmBoth" key="Laden &amp; Lossen" text="Laden &amp; Lossen"/>
-              </Select>
+          <Label id="lblType" text="Type" />
+          <Select id="selType" selectedKey="{movementModel>/MovementType}">
+            <core:Item key="Laden" text="Laden" />
+            <core:Item key="Lossen" text="Lossen" />
+            <core:Item key="Laden &amp; Lossen" text="Laden &amp; Lossen" />
+          </Select>
 
-              <Label id="lblMaterials" text="Materialen" class="sapUiSmallMarginTop"/>
-              <Table
-                id="tblMaterials"
-                items="{movementModel>/Materials}"
-                mode="Delete"
-                delete="onRemoveMaterial">
-                <columns>
-                  <Column id="colMatnrHdr"><Text id="txtMatnrHdr" text="Matnr"/></Column>
-                  <Column id="colDescHdr"><Text id="txtDescHdr" text="Beschrijving"/></Column>
-                  <Column id="colQtyHdr"><Text id="txtQtyHdr" text="Aantal"/></Column>
-                  <Column id="colWtHdr"><Text id="txtWtHdr" text="Eenheidsgewicht"/></Column>
-                </columns>
-                <items>
-                  <ColumnListItem id="cliMaterial">
-                    <cells>
-                      <Text id="txtMatnr" text="{movementModel>MaterialNumber}"/>
-                      <Text id="txtDesc" text="{movementModel>Description}"/>
-                      <Text id="txtQty"  text="{movementModel>Quantity}"/>
-                      <Text id="txtWt"   text="{movementModel>UnitWeight}"/>
-                    </cells>
-                  </ColumnListItem>
-                </items>
-              </Table>
+          <Label id="lblMaterials" text="Materialen" class="sapUiSmallMarginTop" />
+          <Table
+            id="tblMaterials"
+            items="{movementModel>/Materials}"
+            mode="Delete"
+            delete="onRemoveMaterial">
+            <columns>
+              <Column><Text text="Matnr" /></Column>
+              <Column><Text text="Beschrijving" /></Column>
+              <Column><Text text="Aantal" /></Column>
+              <Column><Text text="Eenheidsgewicht" /></Column>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <Text text="{movementModel>MaterialNumber}" />
+                  <Text text="{movementModel>Description}" />
+                  <Text text="{movementModel>Quantity}" />
+                  <Text text="{movementModel>UnitWeight}" />
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
 
-              <HBox id="hbMatButtons" class="sapUiSmallMargin">
-                <Button id="btnAddMat" text="Add Material" press="onAddMaterial"/>
-              </HBox>
+          <HBox id="hbMatButtons" class="sapUiSmallMargin">
+            <Button id="btnAddMat" text="Add Material" press="onAddMaterial" />
+          </HBox>
 
-            </VBox>
-          </ScrollContainer>
-        </f:content>
+        </VBox>
+      </ScrollContainer>
+    </f:content>
 
-      </f:DynamicPage>
-    </f:midColumnPages>
-  </f:FlexibleColumnLayout>
+  </f:DynamicPage>
 </mvc:View>

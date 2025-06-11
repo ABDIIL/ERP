@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mvc:View
+  controllerName="movementsapplication.controller.Master"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core">
+  <f:DynamicPage id="masterPage" headerExpanded="true">
+    <f:title>
+      <f:DynamicPageTitle id="dptTitle">
+        <f:heading>
+          <Title id="titleHeading" text="{i18n>titleMovements}" />
+        </f:heading>
+      </f:DynamicPageTitle>
+    </f:title>
+    <f:content>
+      <VBox id="vboxContent">
+        <Toolbar id="toolbarFilter">
+          <Select id="selFilterType" change="onFilterChange">
+            <core:Item id="itmFilterAll" key="All" text="{i18n>filterTypeAll}" />
+            <core:Item id="itmFilterLoad" key="Laden" text="{i18n>filterTypeLoad}" />
+            <core:Item id="itmFilterUnload" key="Lossen" text="{i18n>filterTypeUnload}" />
+            <core:Item id="itmFilterBoth" key="Laden &amp; Lossen" text="{i18n>filterTypeBoth}" />
+          </Select>
+          <DatePicker id="dpFilterDate" displayFormat="dd.MM.yyyy" change="onFilterChange" />
+          <ToolbarSpacer id="tsFilterSpacer" />
+          <Button id="btnCreate" text="{i18n>buttonCreate}" type="Emphasized" press="onCreate" />
+        </Toolbar>
+        <List
+          id="lstMovements"
+          mode="SingleSelectLeft"
+          items="{path: '/MovementSet'}"
+          itemPress="onSelect">
+          <items>
+            <ObjectListItem
+              id="oliMovement"
+              title="{MovementID}"
+              intro="{FromLocation} → {ToLocation}"
+              number="{MovementType}"
+              type="Active" />
+          </items>
+        </List>
+      </VBox>
+    </f:content>
+  </f:DynamicPage>
+</mvc:View>

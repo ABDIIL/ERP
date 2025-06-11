@@ -1,27 +1,23 @@
 {
   "_version": "1.12.0",
   "sap.app": {
-    "id": "project1",
+    "id": "movementsapplication",
     "type": "application",
     "i18n": "i18n/i18n.properties",
-    "title": "Movements Application",
-    "description": "Overzicht en beheer van vrachtverplaatsingen",
     "applicationVersion": {
       "version": "1.0.0"
-    },
-    "dataSources": {
-      "mainService": {
-        "uri": "/sap/opu/odata/sap/ZSD_067_MOVEMENT_GW_SRV/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "2.0",
-          "localUri": "localService/mainService/metadata.xml"
-        }
-      }
     }
   },
   "sap.ui": {
     "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
     "deviceTypes": {
       "desktop": true,
       "tablet": true,
@@ -32,68 +28,52 @@
     "rootView": {
       "viewName": "movementsapplication.view.App",
       "type": "XML",
+      "async": true,
       "id": "app"
-    },
-    "dependencies": {
-      "minUI5Version": "1.88.0",
-      "libs": {
-        "sap.m": {},
-        "sap.f": {}
-      }
     },
     "models": {
       "": {
         "dataSource": "mainService",
         "settings": {
-          "defaultCountMode": "Inline",
-          "useBatch": true
-        }
-      },
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleName": "movementsapplication.i18n.i18n"
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "updateMethod": "Put"
         }
       }
     },
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZSD_067_MOVEMENT_GW_SRV/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "resources": {
+      "css": [],
+      "js": []
     },
     "routing": {
       "config": {
         "routerClass": "sap.f.routing.Router",
         "viewType": "XML",
         "viewPath": "movementsapplication.view",
-        "controlId": "fclDetail",
+        "controlId": "flexiID",
         "controlAggregation": "beginColumnPages",
-        "bypassed": {
-          "target": "master"
-        }
+        "async": true
       },
       "routes": [
         {
           "pattern": "",
-          "name": "master",
-          "target": "master"
-        },
-        {
-          "pattern": "detail/{movementContext}",
-          "name": "detail",
-          "target": "detail"
+          "name": "RouteMain",
+          "target": "TargetMain"
         }
       ],
       "targets": {
-        "master": {
-          "viewName": "Master",
-          "viewLevel": 1,
-          "viewId": "masterView"
-        },
-        "detail": {
-          "viewName": "Detail",
-          "viewLevel": 2,
-          "controlAggregation": "midColumnPages",
-          "viewId": "detailView"
+        "TargetMain": {
+          "viewName": "Main",
+          "viewLevel": 1
         }
       }
     }

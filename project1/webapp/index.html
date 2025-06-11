@@ -1,27 +1,32 @@
+<!-- webapp/index.html -->
 <!DOCTYPE html>
-<html lang="nl">
+<html>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movements Application</title>
+    <meta charset="UTF-8" />
+    <title>movementsapplication</title>
+    <!-- UI5 bootstrap zonder vaste versie -->
     <script
       id="sap-ui-bootstrap"
-      src="https://ui5.sap.com/1.88.0/resources/sap-ui-core.js"
-      data-sap-ui-libs="sap.m sap.f"
+      src="https://ui5.sap.com/resources/sap-ui-core.js"
       data-sap-ui-theme="sap_fiori_3"
-      data-sap-ui-async="true"
+      data-sap-ui-libs="sap.m sap.f"
       data-sap-ui-compatVersion="edge"
-      data-sap-ui-resourceroots='{"movementsapplication": "./"}'
-    ></script>
+      data-sap-ui-bindingSyntax="complex"
+      data-sap-ui-resourceroots='{
+        "movementsapplication": "./"
+      }'
+      data-sap-ui-onInit="module:sap/ui/core/ComponentSupport">
+    </script>
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
   </head>
-  <body class="sapUiBody sapUiSizeCompact" id="content">
-    <div
-      id="container"
-      data-sap-ui-component
-      data-name="movementsapplication"
-      data-id="movementsapplication"
-      data-settings='{"id":"movementsapplication"}'
-      data-handle-validation="true"
-    ></div>
+  <body
+    class="sapUiBody"
+    id="content">
+    <!-- De UI5 ComponentSupport directive laadt automatisch je Component.js en view/App.view.xml -->
   </body>
 </html>
